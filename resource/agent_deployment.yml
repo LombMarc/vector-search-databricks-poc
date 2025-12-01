@@ -1,0 +1,23 @@
+resources:
+  jobs:
+    agent-release-job:
+      name: "agent-release-job"
+
+      parameters:
+        - name: catalog
+          default: "poc_catalog"
+        - name: schema
+          default: "vector_poc"
+        - name: model_name
+          default: "rag_agent"
+        - name: vector_index
+          default: "vector_index_client"
+        
+
+      tasks:
+        - task_key: "Create_RAG_agent"
+          notebook_task:
+            notebook_path: "../src/databricks/agent/driver.py"
+
+          
+

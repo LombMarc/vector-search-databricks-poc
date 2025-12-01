@@ -1,0 +1,10 @@
+bundle:
+  name: poc_vector_search
+
+include:
+  - resource/*.yml
+
+targets:
+  dev:
+    workspace:
+      host: https://dbc-049b6067-a85a.cloud.databricks.com
