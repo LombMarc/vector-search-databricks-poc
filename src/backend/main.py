@@ -105,7 +105,7 @@ async def answer(payload: QueryPayload, x_api_key: Optional[str] = Header(None))
 
     # Build instruction prompt for FLAN-T5
     prompt = (
-        "You are a helpful assistant. Use the provided Context to answer the Question.\n\n"
+        "You are a helpful assistant. Use the provided Context to answer the question. Answer with 'I do not have the required information' if contex is empty.\n\n"
         f"Context:\n{context}\n\n"
         f"Question: {payload.query}\n\n"
         "Answer concisely and do not repeat the context verbatim.\n"

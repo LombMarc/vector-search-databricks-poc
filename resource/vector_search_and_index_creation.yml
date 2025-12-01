@@ -1,0 +1,42 @@
+resources:
+  jobs:
+    vector_search_pipeline:
+      name: "vector-search-pipeline"
+
+      parameters:
+        - name: catalog
+          default: "poc_catalog"
+        - name: schema
+          default: "vector_poc"
+        - name: "raw_index_table_source"
+          default: "raw_data"
+        - name: "raw_table_with_embeddings"
+          default: "raw_data_with_embeddings"
+        - name: vector_endpoint_name
+          default: "vector-search-endpoint"
+        - name: index_name
+          default: "vector_index"
+        - name: "embedding_model"
+          default: "databricks-gte-large-en"
+        - name: "embedding_model_hf"
+          default: "sentence-transformers/all-MiniLM-L6-v2"
+        - name: "embedding_dimension"
+          default: "384"
+        - name: "use_dbks_client"
+          default: "true"
+        - name: "text_query"
+          default: "What is a delta lake?"
+        
+
+      tasks:
+        - task_key: "create_table_and_index"
+          notebook_task:
+            notebook_path: "../src/databricks/syntetic_data.py"
+        - task_key: "query_vector_index"
+          depends_on:
+            - task_key: "create_table_and_index"
+          notebook_task:
+            notebook_path: "../src/databricks/query_endpoint.py"
+            
+          
+
