@@ -47,10 +47,6 @@ except:
     vector_index = dbutils.widgets.get("vector_index")
 # COMMAND ----------
 # MAGIC %%writefile agent.py
-from databricks.sdk.runtime import *
-catalog = dbutils.widgets.get("catalog")
-schema = dbutils.widgets.get("schema")
-vector_index = dbutils.widgets.get("vector_index")
 import json
 from typing import Any, Callable, Generator, Optional
 from uuid import uuid4
@@ -62,7 +58,7 @@ import openai
 from databricks.sdk import WorkspaceClient
 from databricks_openai import UCFunctionToolkit, VectorSearchRetrieverTool
 from mlflow.entities import SpanType
-from mlflow.pyfunc import ResponsesAgent
+from mlflow.pyfunc import ResponsesAgent, ChatAgent
 from mlflow.types.responses import (
     ResponsesAgentRequest,
     ResponsesAgentResponse,
@@ -255,11 +251,8 @@ mlflow.models.set_model(AGENT)
 dbutils.library.restartPython()
 
 # COMMAND ----------
+
 from agent import AGENT
-
-AGENT.predict({"input": [{"role": "user", "content": "What is a delta lake"}]})
-
-# COMMAND ----------
 
 for chunk in AGENT.predict_stream(
     {"input": [{"role": "user", "content": "what is a delta lake?"}]}
@@ -279,6 +272,7 @@ for chunk in AGENT.predict_stream(
 
 # Determine Databricks resources to specify for automatic auth passthrough at deployment time
 import mlflow
+from databricks import agents
 from agent import UC_TOOL_NAMES, VECTOR_SEARCH_TOOLS, LLM_ENDPOINT_NAME
 from mlflow.models.resources import DatabricksFunction, DatabricksServingEndpoint
 from pkg_resources import get_distribution
@@ -312,6 +306,7 @@ with mlflow.start_run():
         ],
         resources=resources,
     )
+
 
 # COMMAND ----------
 
@@ -416,5 +411,5 @@ uc_registered_model_info = mlflow.register_model(
 
 from databricks import agents
 
-agents.deploy(UC_MODEL_NAME, uc_registered_model_info.version, tags = {"endpointSource": "playground"}, scale_to_zero=True)
+agents.deploy(UC_MODEL_NAME, uc_registered_model_info.version, tags = {"endpointSource": "custom_agent"}, scale_to_zero=True)
 

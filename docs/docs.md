@@ -129,3 +129,31 @@ curl -X POST 'http://127.0.0.1:8000/query' \
 
 We can see now that the output will contains information coming from index. Means that connection was succesful.
 
+## Databricks app UI
+I wanted to try using the new endpoint with databricks app to disclose even this possibility. Unfortunately there is no out of the box solution since databricks provided template for the older version of the framework (ChatAgent rather than ResponseAgent). Of course is possible to tweak around the app template to make it work even with the Response agent endpoint type.
+
+If you want to make it work you should:
+- edit the kind of endpoint accepted to include ResponseAgent
+- edit the _query_endpoint to make the format the request as the response agent expect
+``` 
+def is_endpoint_supported(endpoint_name: str) -> bool:
+    """Check if the endpoint has a supported task type."""
+    task_type = _get_endpoint_task_type(endpoint_name)
+    supported_task_types = ["agent/v1/chat", "agent/v2/chat", "llm/v1/chat", "agent/v1/responses"]
+    return task_type in supported_task_types
+
+def _query_endpoint(endpoint_name: str, messages: list[dict[str, str]], max_tokens) -> list[dict[str, str]]:
+    """Calls a model serving endpoint."""
+    _validate_endpoint_task_type(endpoint_name)
+    print("pre-call input formatting")
+    input_dict = {'input': messages}
+    res = get_deploy_client('databricks').predict(
+        endpoint=endpoint_name,
+        inputs=input_dict,
+    )
+    res = dict(res.output[-1])
+    return {'content' : res['content'][0]['text']}
+```
+
+Databricks app can be released as bundle if editing is needed.
+![Databricks-app-chat](img/databricks-app-chat.png)
