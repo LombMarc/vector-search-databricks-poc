@@ -1,0 +1,10 @@
+resources:
+  apps:
+    poc-agent-rag-chat:
+      name: "poc-agent-rag-chat"
+      source_code_path: "../src/databricks-app"
+      resources:
+        - name: "serving-endpoint"
+          serving_endpoint:
+            name: agents_poc_catalog-vector_poc-rag_agent
+            permission: "CAN_QUERY"

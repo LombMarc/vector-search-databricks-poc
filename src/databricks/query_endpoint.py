@@ -9,6 +9,7 @@
 import pandas as pd
 from pyspark.sql.types import ArrayType, FloatType
 from databricks.vector_search.client import VectorSearchClient
+from databricks.vector_search.reranker import DatabricksReranker
 from databricks.sdk import WorkspaceClient
 import json
 try:
@@ -123,9 +124,10 @@ if use_dbks_client:
     try:
         index = client = VectorSearchClient(disable_notice=True).get_index(index_name=full_name(index_name)+"_client")
         response = index.similarity_search(
-            columns ="text",
+            columns ="summary",
             query_text=QUERY_TEXT,
             num_results=2,
+            #reranker=DatabricksReranker(columns_to_rerank=["summary", "title", "other_column"])
         )
         result = json.dumps(response, indent=2)
     except Exception as e:
@@ -138,7 +140,7 @@ else:
         
         index = client = VectorSearchClient(disable_notice=True).get_index(index_name=full_name(index_name)+"_custom")
         response = index.similarity_search(
-            columns ="text",
+            columns ="summary",
             query_vector=query_vector,
             num_results=2,
         )

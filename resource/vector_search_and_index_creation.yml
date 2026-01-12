@@ -11,11 +11,11 @@ resources:
         - name: "raw_index_table_source"
           default: "raw_data"
         - name: "raw_table_with_embeddings"
-          default: "raw_data_with_embeddings"
+          default: "raw_data_with_embeddings_arxiv"
         - name: vector_endpoint_name
           default: "vector-search-endpoint"
         - name: index_name
-          default: "vector_index"
+          default: "vector_index_arxiv"
         - name: "embedding_model"
           default: "databricks-gte-large-en"
         - name: "embedding_model_hf"
@@ -25,13 +25,15 @@ resources:
         - name: "use_dbks_client"
           default: "true"
         - name: "text_query"
-          default: "What is a delta lake?"
+          default: "Language model improvement"
+        - name: "syntetic_data"
+          default: "false"
         
 
       tasks:
         - task_key: "create_table_and_index"
           notebook_task:
-            notebook_path: "../src/databricks/syntetic_data.py"
+            notebook_path: "../src/databricks/syntetic_data_arxiv.py"
         - task_key: "query_vector_index"
           depends_on:
             - task_key: "create_table_and_index"

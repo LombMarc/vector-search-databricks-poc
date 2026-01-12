@@ -5,11 +5,14 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "dash==3.0.2",
+    "dash-bootstrap-components==2.0.0",
     "databricks-sdk>=0.67.0",
     "databricks-vectorsearch>=0.60",
     "fastapi>=0.118.3",
-    "mlflow>=3.4.0",
+    "mlflow>=2.21.2",
     "pydantic>=2.12.0",
+    "python-dotenv==1.1.0",
     "transformers>=4.57.0",
     "uvicorn>=0.37.0",
 ]

@@ -133,7 +133,7 @@ for tool_spec in uc_toolkit.tools:
 VECTOR_SEARCH_TOOLS = []
 VECTOR_SEARCH_TOOLS.append(
         VectorSearchRetrieverTool(
-            index_name="poc_catalog.vector_poc.vector_index_client",
+            index_name="poc_catalog.vector_poc.vector_index_arxiv_client", #I was not able to parametrize this since we are creating the .py file within the notebook
             # TODO: specify index description for better agent tool selection
             # tool_description=""
         )

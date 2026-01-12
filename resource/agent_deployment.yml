@@ -11,7 +11,7 @@ resources:
         - name: model_name
           default: "rag_agent"
         - name: vector_index
-          default: "vector_index_client"
+          default: "vector_index_arxiv_client"
         
 
       tasks:
